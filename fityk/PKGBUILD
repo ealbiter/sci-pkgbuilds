@@ -13,7 +13,6 @@ license=('GPL')
 depends=('lua52' 'wxgtk' 'xylib>=1.4')
 makedepends=('boost' 'python2-sphinx' 'swig')
 options=(!libtool)
-install=fityk.install
 source=("https://github.com/wojdyr/$pkgname/releases/download/v$pkgver/$pkgname-$pkgver.tar.bz2")
 md5sums=('41c9a2589e2eac4317a480b364ff493a')
 
