@@ -9,7 +9,7 @@ pkgdesc="A finite element software for multiphysical problems"
 arch=('x86_64')
 url="http://www.elmerfem.org"
 license=('GPL')
-depends=('arpack' 'qt5-script' 'netcdf-fortran-openmpi' 'mmg' 'vtk' 'qwt' 'hypre' 'oce' 'libopenblas' 'mumps-par' 'paraview-opt')
+depends=('arpack' 'qt5-script' 'netcdf-fortran-openmpi' 'mmg' 'qwt' 'hypre' 'oce' 'libopenblas' 'mumps-par' 'paraview-opt')
 optdepends=('metis: Split grids to perform parallel runs')
 makedepends=('gcc-fortran' 'cmake')
 conflicts=('elmerfem-git')
@@ -77,10 +77,11 @@ package() {
   install -D -m644 "$srcdir/$pkgname-release-$pkgver/ElmerGUI/Application/images/logo.png" share/pixmaps/$pkgname.png
   install -D -m644 "$srcdir/$pkgname.desktop" share/applications
 
-  #Install additional edf files (GUI solvers)
+  #Install additional edf files (GUI for solvers)
   cp share/ElmerGUI/edf-extra/* share/ElmerGUI/edf
   
   #Clean up and move stuff in place
   mv share/ElmerGUI/license_texts/GPL_EXCEPTION share/licenses/$pkgname
+  mv share/elmersolver/lib/* lib/
   rm share/ElmerGUI/license_texts/*
 }
