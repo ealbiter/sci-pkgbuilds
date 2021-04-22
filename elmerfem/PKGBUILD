@@ -17,11 +17,13 @@ options=(!emptydirs)
 source=("https://github.com/ElmerCSC/$pkgname/archive/release-$pkgver.tar.gz"
         "$pkgname.desktop"
         "ElmerIce.patch"
-        "progateIndex.patch")
+        "progateIndex.patch"
+        "variableTSteps.patch")
 sha256sums=('08c5bf261e87ff37456c1aa0372db3c83efabe4473ea3ea0b8ec66f5944d1aa0'
             'f4b39389e5f258c7860b8d7a6b171fb54bf849dc772f640ac5e7a12c7a384aca'
             '90287c988ac4f5beedf5221e81f624799ec3253c63a30695e1873044ac5a6515'
-            '4a4e69ee31f404ac856a409fe66cfde6431d0e0168dac7595a26818d0934cf76')
+            '4a4e69ee31f404ac856a409fe66cfde6431d0e0168dac7595a26818d0934cf76'
+            'b30cfba9baa164463b728299b7c9b48539da026992e7c9fa5995a938f7ad8ef8')
 
 prepare() {
   cd "$srcdir/$pkgname-release-$pkgver"
@@ -29,6 +31,7 @@ prepare() {
   mkdir ../build
   patch -p0 < "$srcdir/ElmerIce.patch"
   patch -p1 < "$srcdir/progateIndex.patch"
+  patch -p1 < "$srcdir/variableTSteps.patch"
   sed -i '/#include <QPainter>/a #include <QPainterPath>' ElmerGUI/Application/twod/renderarea.cpp
   
 }
