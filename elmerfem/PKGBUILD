@@ -44,12 +44,12 @@ build() {
     -DMPI_Fortran_COMPILE_FLAGS="$FCFLAGS -fallow-argument-mismatch -fallow-invalid-boz" \
     -DELMER_INSTALL_LIB_DIR=/usr/lib \
     -DWITH_ELMERGUI=ON \
+    -DWITH_ElmerIce=OFF \
     -DWITH_LUA=ON \
     -DWITH_MATC=ON \
     -DWITH_MPI=ON \
     -DWITH_OpenMP=ON \
     -DWITH_QT5=ON \
-    -DWITH_ScatteredDataInterpolator=ON \
     -DOpenGL_GL_PREFERENCE=GLVND \
     -DWITH_Hypre=ON \
     -DHYPRE_INCLUDE_DIR=/usr/include/hypre \
