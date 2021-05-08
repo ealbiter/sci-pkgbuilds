@@ -4,7 +4,7 @@
 
 pkgname=elmerfem
 pkgver=9.0
-pkgrel=4.2
+pkgrel=4.3
 pkgdesc="A finite element software for multiphysical problems"
 arch=('x86_64')
 url="http://www.elmerfem.org"
@@ -59,6 +59,7 @@ build() {
     -DWITH_VTK=ON \
     -DWITH_PARAVIEW=ON 
   make all
+    
 }
 
 package() {
@@ -88,5 +89,5 @@ package() {
   #Clean up and move stuff in place
   mv share/ElmerGUI/license_texts/GPL_EXCEPTION share/licenses/$pkgname
   #mv share/elmersolver/lib/* lib/
-  rm share/ElmerGUI/license_texts/*
+  rm -R share/ElmerGUI/license_texts/
 }
