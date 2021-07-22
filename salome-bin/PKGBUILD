@@ -13,7 +13,9 @@ depends=(
 )
 provides=('salome')
 options=(!strip)
-# Download the Universal Linux binaries (normal or mpi-based versions) from https://www.salome-platform.org/downloads/current-version. Then, rename the file to salome.tar.gz
+# Download the Universal Linux binaries (normal or mpi-based versions) from 
+#https://www.salome-platform.org/downloads/current-version. 
+#Then, rename the file to salome.tar.gz
 source=(
     "salome.tar.gz"
     "nameserver.patch"
@@ -21,15 +23,11 @@ source=(
 )
 sha256sums=('SKIP'
             '467966b59321f37a5eec393fdf2525d696ba82e0e4ea144ee2c2d52d0344fc3e'
-            '7945aeeca37f3584a61b9c0fc724fdfcec3731505549271ea0813e6dbacf30f1')
+            '5da4daed1f88f02f3868107efa0c38cdacf30ca38eb4ff37d83c382988f54677')
  
 prepare() {
     cd "${srcdir}"
-    
-    # Remove previous build folder if present, otherwise the installer will fail
-	[ ! -d "${srcdir}/INSTALL" ] || rm -rf "${srcdir}/INSTALL"
-
-	patch -p0 < "${srcdir}/nameserver.patch"
+    patch -p0 < "${srcdir}/nameserver.patch"
 }
 
 package(){
@@ -44,7 +42,7 @@ package(){
     #Create executable
     cat > "${pkgdir}/usr/bin/salome" <<-EOF
     #!/usr/bin/env bash
-    exec /usr/bin/python /opt/salome-bin/salome
+    exec /opt/salome-bin/salome
 	EOF
     chmod +x usr/bin/salome
     
