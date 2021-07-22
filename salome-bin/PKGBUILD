@@ -1,6 +1,6 @@
 pkgname=salome-bin
 pkgver=9.7.0
-pkgrel=1
+pkgrel=2
 pkgdesc='Generic platform for Pre and Post-Processing for numerical simulation'
 arch=('x86_64')
 url='https://www.salome-platform.org'
@@ -37,7 +37,7 @@ package(){
     install -dv usr/share/applications
     install -dv usr/share/pixmaps
     install -dv usr/bin
-    install -dv opt/salome-bin
+    install -dv opt/$pkgname
     
     #Create executable
     cat > "${pkgdir}/usr/bin/salome" <<-EOF
@@ -53,5 +53,5 @@ package(){
 
 	#Install application
 	#If the MPI version is not used, adjust the following line
-	mv "${srcdir}/SALOME-${pkgver}-MPI"/{BINARIES-CO7,PROJECT,SOURCES,salome,binsalome,mesa_salome,env_launch.sh} "${pkgdir}/opt/salome-bin"
+	mv "${srcdir}/SALOME-${pkgver}-MPI"/{BINARIES-CO7,PROJECT,SOURCES,salome,binsalome,mesa_salome,env_launch.sh} "opt/${pkgname}"
 }
