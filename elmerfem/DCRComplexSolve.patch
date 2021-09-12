@@ -1,0 +1,47 @@
+--- old/fem/src/modules/DCRComplexSolve.F90	2020-11-10 13:52:44.000000000 -0600
++++ new/fem/src/modules/DCRComplexSolve.F90	2021-09-11 21:09:52.044583978 -0500
+@@ -426,7 +426,7 @@
+    SUBROUTINE InputTensor( Tensor, IsScalar, Name, Material, n, NodeIndexes )
+ !------------------------------------------------------------------------------
+       REAL(KIND=dp) :: Tensor(:,:,:)
+-      INTEGER :: n, NodeIndexes(:)
++      INTEGER :: i, n, NodeIndexes(:)
+       LOGICAL :: IsScalar
+       CHARACTER(LEN=*) :: Name
+       TYPE(ValueList_t), POINTER :: Material
+@@ -478,7 +478,7 @@
+    SUBROUTINE InputVector( Tensor, IsScalar, Name, Material, n, NodeIndexes )
+ !------------------------------------------------------------------------------
+       REAL(KIND=dp) :: Tensor(:,:)
+-      INTEGER :: n, NodeIndexes(:)
++      INTEGER :: i, n, NodeIndexes(:)
+       LOGICAL :: IsScalar
+       CHARACTER(LEN=*) :: Name
+       TYPE(ValueList_t), POINTER :: Material
+@@ -1067,7 +1067,7 @@
+    SUBROUTINE InputVector( Tensor, IsScalar, Name, Material, n, NodeIndexes )
+ !------------------------------------------------------------------------------
+       REAL(KIND=dp) :: Tensor(:,:)
+-      INTEGER :: n, NodeIndexes(:)
++      INTEGER :: i, n, NodeIndexes(:)
+       LOGICAL :: IsScalar
+       CHARACTER(LEN=*) :: Name
+       TYPE(ValueList_t), POINTER :: Material
+@@ -1367,7 +1367,7 @@
+    SUBROUTINE InputTensor( Tensor, IsScalar, Name, Material, n, NodeIndexes )
+ !------------------------------------------------------------------------------
+       REAL(KIND=dp) :: Tensor(:,:,:)
+-      INTEGER :: n, NodeIndexes(:)
++      INTEGER :: i, n, NodeIndexes(:)
+       LOGICAL :: IsScalar
+       CHARACTER(LEN=*) :: Name
+       TYPE(ValueList_t), POINTER :: Material
+@@ -1419,7 +1419,7 @@
+    SUBROUTINE InputVector( Tensor, IsScalar, Name, Material, n, NodeIndexes )
+ !------------------------------------------------------------------------------
+       REAL(KIND=dp) :: Tensor(:,:)
+-      INTEGER :: n, NodeIndexes(:)
++      INTEGER :: i, n, NodeIndexes(:)
+       LOGICAL :: IsScalar
+       CHARACTER(LEN=*) :: Name
+       TYPE(ValueList_t), POINTER :: Material
