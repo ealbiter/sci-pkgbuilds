@@ -9,7 +9,8 @@ pkgdesc="A finite element software for multiphysical problems"
 arch=('x86_64')
 url="http://www.elmerfem.org"
 license=('GPL')
-depends=('arpack' 'qt5-script' 'netcdf-fortran-openmpi' 'mmg' 'qwt' 'hypre' 'oce' 'libopenblas' 'mumps-par' 'paraview-opt')
+#removed dependencies 'hypre'
+depends=('arpack' 'qt5-script' 'netcdf-fortran-openmpi' 'mmg' 'qwt' 'oce' 'openblas' 'mumps-par' 'paraview-opt')
 optdepends=('metis: Split grids to perform parallel runs')
 makedepends=('gcc-fortran' 'cmake')
 conflicts=('elmerfem-git')
@@ -54,13 +55,13 @@ build() {
     -DWITH_OpenMP=ON \
     -DWITH_QT5=ON \
     -DOpenGL_GL_PREFERENCE=GLVND \
-    -DWITH_Hypre=ON \
-    -DHYPRE_INCLUDE_DIR=/usr/include/hypre \
+    -DWITH_Hypre=OFF \
     -DWITH_QWT=ON \
     -DWITH_OCC=ON \
     -DWITH_Mumps=ON \
     -DWITH_VTK=ON \
-    -DWITH_PARAVIEW=ON 
+    -DWITH_PARAVIEW=ON
+# -DHYPRE_INCLUDE_DIR=/usr/include/hypre \
   make all
     
 }
