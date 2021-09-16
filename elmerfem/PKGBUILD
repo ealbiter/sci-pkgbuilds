@@ -10,7 +10,7 @@ arch=('x86_64')
 url="http://www.elmerfem.org"
 license=('GPL')
 #removed dependencies 'hypre'
-depends=('arpack' 'qt5-script' 'netcdf-fortran-openmpi' 'mmg' 'qwt' 'oce' 'openblas' 'mumps-par' 'paraview-opt')
+depends=('arpack' 'qt5-script' 'netcdf-fortran-openmpi' 'mmg' 'qwt' 'oce' 'blas' 'mumps-par' 'paraview-opt')
 optdepends=('metis: Split grids to perform parallel runs')
 makedepends=('gcc-fortran' 'cmake')
 conflicts=('elmerfem-git')
