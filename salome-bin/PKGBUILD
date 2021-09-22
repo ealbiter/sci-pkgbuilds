@@ -1,6 +1,6 @@
 pkgname=salome-bin
 pkgver=9.7.0
-pkgrel=2
+pkgrel=3
 pkgdesc='Generic platform for Pre and Post-Processing for numerical simulation'
 arch=('x86_64')
 url='https://www.salome-platform.org'
@@ -9,21 +9,21 @@ depends=(
     'coreutils'
     'inetutils'
     'net-tools'
-    'openblas'
+    'blas'
 )
 provides=('salome')
 options=(!strip)
 # Download the Universal Linux binaries (normal or mpi-based versions) from 
-#https://www.salome-platform.org/downloads/current-version. 
+#https://www.salome-platform.org/downloads/
 #Then, rename the file to salome.tar.gz
 source=(
     "salome.tar.gz"
     "nameserver.patch"
     "${pkgname}.desktop"
 )
-sha256sums=('SKIP'
+sha256sums=('513d436eec3e2fd9d03a08386599bb84c145608d669c71d429b97005d4290fb4'
             '467966b59321f37a5eec393fdf2525d696ba82e0e4ea144ee2c2d52d0344fc3e'
-            '5da4daed1f88f02f3868107efa0c38cdacf30ca38eb4ff37d83c382988f54677')
+            'e2c9c057fbc659775e9c43807a9bb1ed032b451d82fbce301c934b8dd5178a8e')
  
 prepare() {
     cd "${srcdir}"

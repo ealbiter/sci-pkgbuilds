@@ -2,7 +2,7 @@
 [Desktop Entry]
 Type=Application
 Exec=/opt/salome-bin/salome
-#MimeType=
+MimeType=application/x-hdf
 Comment=Generic platform for Pre and Post-Processing for numerical simulation
 Icon=/usr/share/pixmaps/salome-bin.png
 Terminal=false
