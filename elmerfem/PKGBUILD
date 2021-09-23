@@ -76,16 +76,15 @@ package() {
   rm -rf -- lib/{*.a,*arpack.so,ElmerGUI}
 
   #Create directories
-  install -dv share/applications
-  install -dv share/pixmaps
-  install -dv share/licenses/$pkgname
+  install -dv share/{applications,pixmaps,licenses/$pkgname}
   
   #Uncomment to install sources, if debugging is needed. Also, add the options !strip debug.
   #install -dv src/debug/$pkgname-release-$pkgver
   #cp -r "$srcdir"/$pkgname-release-$pkgver/* src/debug/$pkgname-release-$pkgver/
 
   #Icon and desktop files
-  install -D -m644 "$srcdir/$pkgname-release-$pkgver/ElmerGUI/Application/images/logo.png" share/pixmaps/$pkgname.png
+  install -D -m644 "$srcdir/$pkgname-release-$pkgver/ElmerGUI/Application/images/logo.png" \
+    share/pixmaps/$pkgname.png
   install -D -m644 "$srcdir/$pkgname.desktop" share/applications
 
   #Install additional edf files (GUI solvers)
@@ -93,6 +92,5 @@ package() {
   
   #Clean up and move stuff in place
   mv share/ElmerGUI/license_texts/GPL_EXCEPTION share/licenses/$pkgname
-  #mv share/elmersolver/lib/* lib/
-  rm -R share/ElmerGUI/license_texts/
+  rm share/ElmerGUI/license_texts/*
 }
