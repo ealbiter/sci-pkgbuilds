@@ -4,7 +4,7 @@
 
 pkgname=elmerfem
 pkgver=9.0
-pkgrel=6
+pkgrel=7
 pkgdesc="A finite element software for multiphysical problems"
 arch=('x86_64')
 url="http://www.elmerfem.org"
@@ -37,6 +37,7 @@ prepare() {
   patch -p1 < "$srcdir/variableTSteps.patch"
   patch -p1 < "$srcdir/DCRComplexSolve.patch"
   sed -i '/#include <QPainter>/a #include <QPainterPath>' ElmerGUI/Application/twod/renderarea.cpp
+  sed -i 's/sprintf(str_pstr, fmt);/sprintf(str_pstr, "%s", fmt);/g' matc/src/str.c
   
 }
 
