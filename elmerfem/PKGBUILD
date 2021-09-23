@@ -69,7 +69,7 @@ build() {
 
 package() {
   cd "$srcdir/build"
-  make DESTDIR="$pkgdir" install
+  make -C DESTDIR="$pkgdir" install
   cd "$pkgdir/usr"
   
   # Remove unecessary libraries

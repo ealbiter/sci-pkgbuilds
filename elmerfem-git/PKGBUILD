@@ -4,7 +4,7 @@
 
 pkgname=elmerfem-git
 _pkgname=elmerfem
-pkgver=9.0.r530.g61e84897
+pkgver=9.0.r549.g31afbeaf
 pkgrel=1
 pkgdesc="A finite element software for multiphysical problems"
 arch=('x86_64')
@@ -35,6 +35,7 @@ prepare() {
   mkdir ../build
   patch -p1 < "$srcdir/progateIndex.patch"
   patch -p1 < "$srcdir/variableTSteps.patch"
+  sed -i 's/sprintf(str_pstr, fmt);/sprintf(str_pstr, "%s", fmt);/g' matc/src/str.c
 }
 
 build() {
@@ -64,16 +65,14 @@ build() {
 
 package() {
   cd "$srcdir/build"
-  make DESTDIR="$pkgdir" install
+  make -C DESTDIR="$pkgdir" install
   cd "$pkgdir/usr"
   
   # Remove unecessary libraries
   rm -rf -- lib/{*.a,*arpack.so,ElmerGUI}
 
   #Create directories
-  install -dv share/applications
-  install -dv share/pixmaps
-  install -dv share/licenses/$pkgname
+  install -dv share/{applications,pixmaps,licenses/$pkgname}
   
   #Uncomment to install sources, if debugging is needed. Also, add the options !strip debug.
   #install -dv src/debug/$pkgname-release-$pkgver
@@ -88,6 +87,5 @@ package() {
   
   #Clean up and move stuff in place
   mv share/ElmerGUI/license_texts/GPL_EXCEPTION share/licenses/$pkgname
-  #mv share/elmersolver/lib/* lib/
-  rm -R share/ElmerGUI/license_texts/
+  rm share/ElmerGUI/license_texts/+
 }
