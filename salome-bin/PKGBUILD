@@ -1,23 +1,16 @@
 pkgname=salome-bin
 pkgver=9.7.0
 pkgrel=3
-pkgdesc='Generic platform for Pre and Post-Processing for numerical simulation'
+pkgdesc='Generic platform for Pre and Post-Processing for numerical simulation. MPI Version'
 arch=('x86_64')
 url='https://www.salome-platform.org'
 license=('LGPL')
-depends=(
-    'coreutils'
-    'inetutils'
-    'net-tools'
-    'blas'
-)
+depends=('coreutils' 'inetutils' 'net-tools' 'blas')
 provides=('salome')
 options=(!strip)
-# Download the Universal Linux binaries (normal or mpi-based versions) from 
-#https://www.salome-platform.org/downloads/
-#Then, rename the file to salome.tar.gz
+#To use use the non-mpi version, remove "mpi" from the source URL and update the SHA256 sum
 source=(
-    "salome.tar.gz"
+    "${pkgname}-${pkgver}.tar.gz::${url}/downloads/current-version/DownloadDistr?platform=SP.UNILINmpi&version=${pkgver}"
     "nameserver.patch"
     "${pkgname}.desktop"
 )
@@ -34,8 +27,7 @@ package(){
     cd "${pkgdir}"
     
     #Create directories
-    install -dv usr/share/applications
-    install -dv usr/share/pixmaps
+    install -dv usr/share/{applications,pixmaps}
     install -dv usr/bin
     install -dv opt/$pkgname
     
@@ -47,11 +39,11 @@ package(){
     chmod +x usr/bin/salome
     
     #Icon and desktop files
-    #If the MPI version is not used, adjust the following line
+    #To use use the non-mpi version, adjust the following line
     install -D -m644 "${srcdir}/SALOME-${pkgver}-MPI/BINARIES-CO7/SALOME/share/salome/resources/salome/app_icon.png" usr/share/pixmaps/$pkgname.png
     install -D -m644 "${srcdir}/${pkgname}.desktop" usr/share/applications
 
 	#Install application
-	#If the MPI version is not used, adjust the following line
+	#To use use the non-mpi version, adjust the following line
 	mv "${srcdir}/SALOME-${pkgver}-MPI"/{BINARIES-CO7,PROJECT,SOURCES,salome,binsalome,mesa_salome,env_launch.sh} "opt/${pkgname}"
 }
