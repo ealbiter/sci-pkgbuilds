@@ -4,7 +4,7 @@
 
 pkgname=elmerfem-git
 _pkgname=elmerfem
-pkgver=9.0.r549.g31afbeaf
+pkgver=9.0.r562.gdd155814
 pkgrel=1
 pkgdesc="A finite element software for multiphysical problems"
 arch=('x86_64')
@@ -35,6 +35,7 @@ prepare() {
   mkdir ../build
   patch -p1 < "$srcdir/progateIndex.patch"
   patch -p1 < "$srcdir/variableTSteps.patch"
+  sed -i '/#include <QPainter>/a #include <QPainterPath>' ElmerGUI/Application/twod/renderarea.cpp
   sed -i 's/sprintf(str_pstr, fmt);/sprintf(str_pstr, "%s", fmt);/g' matc/src/str.c
 }
 
@@ -48,7 +49,7 @@ build() {
     -DWITH_ELMERGUI=ON \
     -DWITH_ElmerIce=OFF \
     -DWITH_LUA=ON \
-    -DWITH_MATC=ON \
+    -DWITH_MATC=OFF \
     -DWITH_MPI=ON \
     -DWITH_OpenMP=ON \
     -DWITH_QT5=ON \
@@ -65,7 +66,7 @@ build() {
 
 package() {
   cd "$srcdir/build"
-  make -C DESTDIR="$pkgdir" install
+  make DESTDIR="$pkgdir" install
   cd "$pkgdir/usr"
   
   # Remove unecessary libraries
@@ -79,13 +80,13 @@ package() {
   #cp -r "$srcdir"/$pkgname-release-$pkgver/* src/debug/$pkgname-release-$pkgver/
 
   #Icon and desktop files
-  install -D -m644 "$srcdir/$pkgname-release-$pkgver/ElmerGUI/Application/images/logo.png" share/pixmaps/$pkgname.png
-  install -D -m644 "$srcdir/$pkgname.desktop" share/applications
+  install -D -m644 "$srcdir/$_pkgname/ElmerGUI/Application/images/logo.png" share/pixmaps/$pkgname.png
+  install -D -m644 "$srcdir/$_pkgname.desktop" share/applications
 
   #Install additional edf files (GUI solvers)
   cp share/ElmerGUI/edf-extra/* share/ElmerGUI/edf
   
   #Clean up and move stuff in place
   mv share/ElmerGUI/license_texts/GPL_EXCEPTION share/licenses/$pkgname
-  rm share/ElmerGUI/license_texts/+
+  rm share/ElmerGUI/license_texts/*
 }
