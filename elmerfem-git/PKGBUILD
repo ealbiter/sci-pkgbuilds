@@ -1,3 +1,4 @@
+# Maintainer: E. Albiter
 # Contributor: Anton Kudelin <kudelin at protonmail dot com>
 # Contributor:  saxonbeta <saxonbeta [[at]] gmail _dot com
 # Contributor: Randy Heydon <randy dot heydon at clockworklab dot net>
@@ -17,11 +18,10 @@ conflicts=("${_pkgname}")
 options=(!emptydirs)
 source=("git+https://github.com/ElmerCSC/elmerfem.git"
         "$_pkgname.desktop"
-        "progateIndex.patch" "variableTSteps.patch")
+        "progateIndex.patch")
 sha256sums=('SKIP'
             'f4b39389e5f258c7860b8d7a6b171fb54bf849dc772f640ac5e7a12c7a384aca'
-            '4a4e69ee31f404ac856a409fe66cfde6431d0e0168dac7595a26818d0934cf76'
-            '1682f9f82e36bbf09696e73b3276c594b3dd02f043bac5c0f21c6cf0dfdcde51')
+            '4a4e69ee31f404ac856a409fe66cfde6431d0e0168dac7595a26818d0934cf76')
 
             
 pkgver() {
@@ -34,8 +34,6 @@ prepare() {
   [ -d "../build" ] && rm ../build -R
   mkdir ../build
   patch -p1 < "$srcdir/progateIndex.patch"
-  patch -p1 < "$srcdir/variableTSteps.patch"
-  sed -i '/#include <QPainter>/a #include <QPainterPath>' ElmerGUI/Application/twod/renderarea.cpp
   sed -i 's/sprintf(str_pstr, fmt);/sprintf(str_pstr, "%s", fmt);/g' matc/src/str.c
 }
 
