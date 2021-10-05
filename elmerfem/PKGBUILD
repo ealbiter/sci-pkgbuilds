@@ -1,10 +1,11 @@
+# Maintainer: E. Albiter.
 # Contributor: Anton Kudelin <kudelin at protonmail dot com>
 # Contributor:  saxonbeta <saxonbeta [[at]] gmail _dot com
 # Contributor: Randy Heydon <randy dot heydon at clockworklab dot net>
 
 pkgname=elmerfem
 pkgver=9.0
-pkgrel=7
+pkgrel=8
 pkgdesc="A finite element software for multiphysical problems"
 arch=('x86_64')
 url="http://www.elmerfem.org"
@@ -25,7 +26,7 @@ sha512sums=('0affb0420b674ebf4d089c4039ba78dd29650f0daf956eab59bd7bea1c466ba6dfd
             '79162b8ebd9fc987eb734565ab3d58aaf6e5882bb09d67d7f2b9c6bfae24dec519f318fd3cc5813e56c0cdcc82aec892a88dc01041430597f4f46694d213c855'
             '301e00ab55802b023d8d0a5945576faabfd916e0f396def043c85f0971cdf3aa16c50f6be4f0a8951da2af93f233376b65499a8cc91baef5ae4d87cbe382f26d'
             '956d352b55be2413500740a2d3e8c3d53540762805d43708f0bc57cc8535fcc87a890a815272a968f221d27d1e105759e441429646260f746d23f1cfe32462fe'
-            'd7df9f5d9bc172bb90731d78ab935724008d11db0a61f832ba020eb1a55f2306d09415a6110933f1ff710e15e82faf7067f222ae54f1dbbd80247bfd82895083'
+            'f8a0acd9425b9620cefabd8b20353871b95db706dd8ba5d03117bddf2a466ad1c1608307ffe93826ca470ffce4b69608ff8d74d2c8d2329b3ae2ceda1f23afb6'
             'c1a9dae8bfc63bf2c448029b7475d6d36c1aaedc09ff534e7152bc8c944c73b02e796740bfe83fdac9006087ec8a3b156f4382fd0a697e3267859d6de2ab8d6d')
 
 prepare() {
@@ -69,7 +70,7 @@ build() {
 
 package() {
   cd "$srcdir/build"
-  make -C DESTDIR="$pkgdir" install
+  make DESTDIR="$pkgdir" install
   cd "$pkgdir/usr"
   
   # Remove unecessary libraries
