@@ -62,7 +62,8 @@ build() {
     -DWITH_OCC=ON \
     -DWITH_Mumps=ON \
     -DWITH_VTK=ON \
-    -DWITH_PARAVIEW=ON
+    -DWITH_PARAVIEW=ON \
+    -Wno-dev
 # -DHYPRE_INCLUDE_DIR=/usr/include/hypre \
   make all
     

@@ -34,7 +34,6 @@ prepare() {
   [ -d "../build" ] && rm ../build -R
   mkdir ../build
   patch -p1 < "$srcdir/progateIndex.patch"
-  sed -i 's/sprintf(str_pstr, fmt);/sprintf(str_pstr, "%s", fmt);/g' matc/src/str.c
 }
 
 build() {
@@ -57,7 +56,8 @@ build() {
     -DWITH_OCC=ON \
     -DWITH_Mumps=ON \
     -DWITH_VTK=ON \
-    -DWITH_PARAVIEW=ON 
+    -DWITH_PARAVIEW=ON \
+    -Wno-dev
   make all
     
 }
