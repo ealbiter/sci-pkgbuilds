@@ -89,5 +89,8 @@ package() {
     mv "${pkgdir}"/usr/share/licenses/{ParaView,paraview-opt}
     mv "${pkgdir}"/{opt/paraview,usr}/share/applications
     mv "${pkgdir}"/{opt/paraview,usr}/share/icons
+    
+    #patch desktop file to use custom ld path
+    sed -i 's/Exec=paraview %f/Exec=LD_LIBRARY_PATH=\/opt\/paraview\/lib \/opt\/paraview\/bin\/paraview %f/g' "${pkgdir}"/usr/share/applications/org.paraview.ParaView.desktop
 }
 # vim:set sw=2 ts=2 et:
