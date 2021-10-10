@@ -1,0 +1,41 @@
+# Maintainer: E. Albiter
+# Contributor: Stefan Husmann <stefan-husmann@t-online.de>
+
+pkgname=mmg-git
+_pkgname=mmg
+pkgver=5.6.0_beta1_0_gcf9bb599
+pkgrel=1
+pkgdesc='Anisotropic tetrahedral remesher and moving mesh generator'
+url="http://www.mmgtools.org/"
+license=('GPL')
+arch=('i686' 'x86_64')
+depends=('scotch' 'vtk')
+makedepends=('cmake' 'netcdf' 'proj' 'qt5-base' 'glew' 'python' 'libogg' 'libtheora')
+provides=('mmg3d' 'mmg')
+conflicts=('mmg3d' 'mmg')
+replaces=('mmg3d')
+source=("git+https://github.com/MmgTools/$_pkgname.git")
+sha256sums=('SKIP')
+
+pkgver() {
+  git -C "${srcdir}/${_pkgname}" describe --long --tag| sed -e '1s/^.//' | sed 's/-/_/g'
+}
+
+build () {
+  cd $_pkgname
+
+  cmake \
+    -DCMAKE_INSTALL_PREFIX="$pkgdir"/usr \
+    -DLIBMMG2D_SHARED=ON \
+    -DLIBMMG3D_SHARED=ON \
+    -DLIBMMGS_SHARED=ON \
+    -DLIBMMG_SHARED=ON \
+    -DUSE_ELAS=OFF
+
+  make
+}
+
+package() {
+  cd $_pkgname
+  make install
+}
