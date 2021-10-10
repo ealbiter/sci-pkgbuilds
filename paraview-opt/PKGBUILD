@@ -18,9 +18,8 @@ provides=("${_pkg}")
 conflicts=("${_pkg}")
 url="https://www.paraview.org"
 license=(BSD custom)
-#adios2 liblas 
 depends=(boost-libs qt5-tools qt5-x11extras qt5-svg intel-tbb openmpi ffmpeg
-         ospray pdal python-numpy cgns protobuf
+         ospray pdal python-numpy cgns protobuf adios2 liblas 
          double-conversion expat freetype2 gdal gl2ps glew hdf5 libjpeg jsoncpp
          libjsoncpp.so libharu libxml2 lz4 xz python-mpi4py netcdf libogg
          libpng pugixml rapidjson libtheora libtiff zlib)
@@ -28,11 +27,9 @@ optdepends=(python-matplotlib python-pandas)
 makedepends=(cmake boost mesa gcc-fortran ninja qt5-tools qt5-xmlpatterns eigen utf8cpp)
 # pegtl https://gitlab.kitware.com/vtk/vtk/-/issues/18151
 source=(${url}/files/v${pkgver:0:3}/ParaView-v${pkgver/R/-R}.tar.xz
-        paraview.sh
         vtk-gcc11.patch::https://gitlab.kitware.com/vtk/vtk/-/merge_requests/7554.patch
         vtk-fix-shader-initialization.patch::https://gitlab.kitware.com/vtk/vtk/-/merge_requests/7978.patch)
 sha256sums=('0d486cb6fbf55e428845c9650486f87466efcb3155e40489182a7ea85dfd4c8d'
-            '862e79bdf72f5c3ec55d3373fc34d0e5da33b1597c54c4586bdf84641d0cc291'
             'c9959adcb59e2f2657f0144b0b68239d4174947fb2ab8051f2575241281e4d68'
             '10864f69e2d6577c56cc536438b5dd7a52b004f6bb253a17569899922d804fe8')
 
@@ -52,12 +49,11 @@ build() {
     cmake -B build -S ParaView-v${pkgver/R/-R} -GNinja \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_INSTALL_PREFIX=/opt/paraview \
-        -DCMAKE_SKIP_INSTALL_RPATH=ON \
-        -DPARAVIEW_ENABLE_ADIOS2=OFF \
+        -DPARAVIEW_ENABLE_ADIOS2=ON \
         -DPARAVIEW_ENABLE_FFMPEG=ON \
-        -DPARAVIEW_ENABLE_FIDES=OFF \
+        -DPARAVIEW_ENABLE_FIDES=ON \
         -DPARAVIEW_ENABLE_GDAL=ON \
-        -DPARAVIEW_ENABLE_LAS=OFF \
+        -DPARAVIEW_ENABLE_LAS=ON \
         -DPARAVIEW_ENABLE_MOTIONFX=ON \
         -DPARAVIEW_ENABLE_PDAL=ON \
         -DPARAVIEW_ENABLE_RAYTRACING=ON \
@@ -73,17 +69,20 @@ build() {
         -DVTK_MODULE_ENABLE_VTK_IOPDAL=YES \
         -DVTK_MODULE_USE_EXTERNAL_VTK_pegtl=OFF \
         -Wno-dev
-    export NINJA_STATUS="[%p | %f<%r<%u | %cbps ] "
-  # shellcheck disable=SC2086 # to allowing MAKEFLAGS to expand into multiple flags.
     ninja -C build ${MAKEFLAGS}
 }
 
 package() {
     DESTDIR="${pkgdir}" ninja -C build install
 
-    # add paraview to PATH
-    install -Dm755 paraview.sh -t "${pkgdir}"/etc/profile.d
-
+    # Create launch script to avoid problems with the custom ld path
+    install -dv "${pkgdir}"/usr/bin
+    cat > "${pkgdir}/usr/bin/paraview" <<-EOF
+    #!/usr/bin/env bash
+    LD_LIBRARY_PATH="/opt/paraview/lib" /opt/paraview/bin/paraview
+	EOF
+    chmod +x "${pkgdir}"/usr/bin/paraview
+    
     # Install licenses,shortcuts,icons
     install -dm755 "${pkgdir}"/usr/share
     mv "${pkgdir}"/{opt/paraview,usr}/share/licenses
