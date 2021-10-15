@@ -21,13 +21,15 @@ source=("https://github.com/ElmerCSC/$pkgname/archive/release-$pkgver.tar.gz"
         "ElmerIce.patch"
         "progateIndex.patch"
         "variableTSteps.patch"
-        "DCRComplexSolve.patch")
+        "DCRComplexSolve.patch"
+        "qwt6_2.patch" )
 sha256sums=('08c5bf261e87ff37456c1aa0372db3c83efabe4473ea3ea0b8ec66f5944d1aa0'
             'f4b39389e5f258c7860b8d7a6b171fb54bf849dc772f640ac5e7a12c7a384aca'
             '90287c988ac4f5beedf5221e81f624799ec3253c63a30695e1873044ac5a6515'
             '4a4e69ee31f404ac856a409fe66cfde6431d0e0168dac7595a26818d0934cf76'
             '0d053dbe045b97f6f4c3ef6f124f56883a7ca8068cf63a19123e7504fbf94953'
-            '5822675d082a5d445e7f1ed09b229aa5bd6d8d9f2e278079382bc3e0f75a152d')
+            '5822675d082a5d445e7f1ed09b229aa5bd6d8d9f2e278079382bc3e0f75a152d'
+            '69c7632455b8dd0a281c1e22353b72802d04a0b2e0ae82ab1e794cf518653e4f')
 
 prepare() {
   cd "$srcdir/$pkgname-release-$pkgver"
@@ -37,6 +39,7 @@ prepare() {
   patch -p1 < "$srcdir/progateIndex.patch"
   patch -p1 < "$srcdir/variableTSteps.patch"
   patch -p1 < "$srcdir/DCRComplexSolve.patch"
+  patch -p1 < "$srcdir/qwt6_2.patch"
   sed -i '/#include <QPainter>/a #include <QPainterPath>' ElmerGUI/Application/twod/renderarea.cpp
   sed -i 's/sprintf(str_pstr, fmt);/sprintf(str_pstr, "%s", fmt);/g' matc/src/str.c
   
