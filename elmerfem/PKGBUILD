@@ -5,7 +5,7 @@
 
 pkgname=elmerfem
 pkgver=9.0
-pkgrel=9
+pkgrel=10
 pkgdesc="A finite element software for multiphysical problems"
 arch=('x86_64')
 url="http://www.elmerfem.org"
