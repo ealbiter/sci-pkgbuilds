@@ -5,7 +5,7 @@
 
 pkgname=elmerfem-git
 _pkgname=elmerfem
-pkgver=9.0.r562.gdd155814
+pkgver=9.0.r625.gaeed74b3
 pkgrel=1
 pkgdesc="A finite element software for multiphysical problems"
 arch=('x86_64')
