@@ -12,8 +12,7 @@ url="http://www.elmerfem.org"
 license=('GPL')
 #removed dependencies 'hypre'
 depends=('arpack' 'qt5-script' 'netcdf-fortran-openmpi' 'mmg' 'qwt' 'oce' 
-         'blas' 'mumps-par' 'paraview-opt' 'vtk' 'scalapack' 'libnn-git' 
-         'libcsa-git')
+         'blas' 'mumps-par' 'paraview-opt' 'vtk' 'scalapack')
 optdepends=('metis: Split grids to perform parallel runs')
 makedepends=('gcc-fortran' 'cmake')
 conflicts=('elmerfem-git')
@@ -67,8 +66,6 @@ build() {
     -DWITH_Mumps=ON \
     -DWITH_VTK=ON \
     -DWITH_PARAVIEW=ON \
-    -DNN_INCLUDE_DIR=/usr/include \
-    -DOpenVR_INCLUDE_DIR=/usr/include \
     -Wno-dev
 
   make all
