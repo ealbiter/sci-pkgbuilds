@@ -11,8 +11,7 @@ arch=('x86_64')
 url="http://www.elmerfem.org"
 license=('GPL')
 #removed dependencies 'hypre'
-depends=('arpack' 'qt5-script' 'netcdf-fortran-openmpi' 'mmg' 'qwt' 'oce' 
-         'blas' 'mumps-par' 'paraview-opt' 'vtk' 'scalapack')
+depends=('arpack' 'qt5-script' 'netcdf-fortran-openmpi' 'mmg' 'qwt' 'oce' 'mumps-par' 'paraview-opt' 'vtk')
 optdepends=('metis: Split grids to perform parallel runs')
 makedepends=('gcc-fortran' 'cmake')
 conflicts=('elmerfem-git')
@@ -33,21 +32,22 @@ sha256sums=('08c5bf261e87ff37456c1aa0372db3c83efabe4473ea3ea0b8ec66f5944d1aa0'
             '69c7632455b8dd0a281c1e22353b72802d04a0b2e0ae82ab1e794cf518653e4f')
 
 prepare() {
-  cd "$srcdir/$pkgname-release-$pkgver"
-  [ -d "../build" ] && rm ../build -R
-  mkdir ../build
-  patch -p0 < "$srcdir/ElmerIce.patch"
-  patch -p1 < "$srcdir/progateIndex.patch"
-  patch -p1 < "$srcdir/variableTSteps.patch"
-  patch -p1 < "$srcdir/DCRComplexSolve.patch"
-  patch -p1 < "$srcdir/qwt6_2.patch"
-  sed -i '/#include <QPainter>/a #include <QPainterPath>' ElmerGUI/Application/twod/renderarea.cpp
-  sed -i 's/sprintf(str_pstr, fmt);/sprintf(str_pstr, "%s", fmt);/g' matc/src/str.c
+    cd "$srcdir/$pkgname-release-$pkgver"
+    patch -p0 < "$srcdir/ElmerIce.patch"
+    patch -p1 < "$srcdir/progateIndex.patch"
+    patch -p1 < "$srcdir/variableTSteps.patch"
+    patch -p1 < "$srcdir/DCRComplexSolve.patch"
+    patch -p1 < "$srcdir/qwt6_2.patch"
+    sed -i '/#include <QPainter>/a #include <QPainterPath>' ElmerGUI/Application/twod/renderarea.cpp
+    sed -i 's/sprintf(str_pstr, fmt);/sprintf(str_pstr, "%s", fmt);/g' matc/src/str.c
   
 }
 
 build() {
-  cd "$srcdir/build"
+  cd "$srcdir"
+  [ -d "./build" ] && rm ./build -R
+  mkdir ./build
+  cd build
   cmake ../$pkgname-release-$pkgver \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_Fortran_FLAGS="$FCFLAGS -fallow-argument-mismatch" \
