@@ -1,5 +1,5 @@
---- SALOME-9.7.0-MPI/BINARIES-CO7/KERNEL/bin/salome/nameserver.py	2021-01-22 12:27:26.000000000 +0100
-+++ SALOME-9.7.0-MPI/BINARIES-CO7/KERNEL/bin/salome/nameserver_new.py	2021-03-20 21:09:03.000000000 +0100
+--- a/BINARIES-CO7/KERNEL/bin/salome/nameserver.py	2021-01-22 12:27:26.000000000 +0100
++++ b/BINARIES-CO7/KERNEL/bin/salome/nameserver.py	2021-03-20 21:09:03.000000000 +0100
 @@ -89,12 +89,8 @@
          else:
            # get ip address on default interface (for instance eth0) to limit listening on this interface (cyber security request)
