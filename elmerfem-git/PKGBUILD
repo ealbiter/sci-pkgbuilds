@@ -104,10 +104,7 @@ _CMAKE_FLAGS+=(
         -DWITH_CHOLMOD=${_use_cholmod}
         -DWITH_Zoltan=${_use_zoltan}
 
-        -DNN_INCLUDE_DIR=/usr/include
-        -DHYPRE_INCLUDE_DIR=/usr/include/hypre
         -DPHDF5HL_LIBRARY=/usr/lib/libhdf5_hl.so
-        -DWITH_ScatteredDataInterpolator=ON
 
         -DWITH_ELMERGUI=${_use_elmergui}
         -DWITH_QT5=${_use_elmergui}
@@ -125,13 +122,19 @@ _CMAKE_FLAGS+=(
         -DEXTERNAL_UMFPACK=${_use_external_umfpack}
         -DEXTERNAL_ARPACK=${_use_external_arpack}
 
-
         -GNinja
         -Wno-dev
 )
-((!DISABLE_ZOLTAN)) && _CMAKE_FLAGS+=(
-                              -DUSE_SYSTEM_ZOLTAN=ON
-                              )
+((!DISABLE_ZOLTAN))     && _CMAKE_FLAGS+=(
+                                  -DUSE_SYSTEM_ZOLTAN=ON
+                                  )
+((!DISABLE_ELMERICE))   && _CMAKE_FLAGS+=(
+                                  -DWITH_ScatteredDataInterpolator=ON
+                                  -DNN_INCLUDE_DIR=/usr/include
+                                  )
+((!DISABLE_HYPRE))     && CMAKE_FLAGS+=(
+                                  -DHYPRE_INCLUDE_DIR=/usr/include/hypre
+                                  )
 pkgname=elmerfem-git
 _pkgname=elmerfem
 pkgver=9.0.r3126.g3bf55472d
