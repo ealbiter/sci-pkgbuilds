@@ -29,8 +29,8 @@ if((!DISABLE_AUTOCONFIG)); then
   DISABLE_MATC=0
   DISABLE_PARAVIEW=0
   DISABLE_QWT=0
-  DISABLE_CHOLMOD=1
-  #DISABLE_ZOLTAN=1
+  DISABLE_CHOLMOD=0
+  DISABLE_ZOLTAN=0
   #DISABLE_ROCALUTION
   DISABLE_OCC=1
   DISABLE_VTK=1
@@ -52,13 +52,16 @@ _fragment=${FRAGMENT:-#branch=devel}
 
 ((ENABLE_DEBUG))    && _build_type=Debug  || _build_type=Relase
 
-((DISABLE_ALL)) && eval DISABLE_{TRILINOS,MMG,ELMERICE,CONTRIB,LUA,GUI,MPI}=1
-((DISABLE_TRILINOS)) && _use_trilinos=OFF || _use_trilinos=ON  # Disable Trilinos - linear system solver (Experimental)
-((DISABLE_MMG))      && _use_mmg=OFF      || _use_mmg=ON       # Disable MMG - dynamic remeshing
-((DISABLE_CONTRIB))  && _use_contrib=OFF  || _use_contrib=ON   # Disable multishell solver for composite lamitanes
-((DISABLE_LUA))      && _use_lua=OFF      || _use_lua=ON       # Disable LUA scripting in solver definitions
-((DISABLE_MP))       && _use_openmp=OFF   || _use_openmp=ON    # Disable OpenMP threading
-((DISABLE_CHOLMOD))  && _use_cholmod=OFF  || _use_cholmod=ON   # Use CHOLMOD linear algebra library
+((DISABLE_ALL))       && eval DISABLE_{TRILINOS,MMG,ELMERICE,CONTRIB,LUA,GUI,MPI}=1
+((!DISABLE_TRILINOS)) && eval DISABLE_ZOLTAN=0                  # Trilinos contains the Zoltan library
+((DISABLE_TRILINOS))  && _use_trilinos=OFF || _use_trilinos=ON  # Disable Trilinos - linear system solver (Experimental)
+((DISABLE_MMG))       && _use_mmg=OFF      || _use_mmg=ON       # Disable MMG - dynamic remeshing
+((DISABLE_CONTRIB))   && _use_contrib=OFF  || _use_contrib=ON   # Disable multishell solver for composite lamitanes
+((DISABLE_LUA))       && _use_lua=OFF      || _use_lua=ON       # Disable LUA scripting in solver definitions
+((DISABLE_MP))        && _use_openmp=OFF   || _use_openmp=ON    # Disable OpenMP threading
+((DISABLE_CHOLMOD))   && _use_cholmod=OFF  || _use_cholmod=ON   # Use CHOLMOD linear algebra library
+((!DISABLE_ZOLTAN))   && eval DISABLE_TRILINOS=1                # Zoltan libray is contained in Trilinos
+((DISABLE_ZOLTAN))    && _use_zoltan=OFF   || _use_zoltan=ON    # Use Zoltan mesh repartitioning library
 
 ((DISABLE_ELMERICE)) && _use_elmerice=OFF || _use_elmerice=ON  # Disable ElmerICE - glacier melting solver
 ((!DISABLE_ELMERICE)) && eval DISABLE_{INTERNAL_UMFPACK,MPI}=0 #Elmer Ice requires MPI and uses the internal UMFPack
@@ -98,7 +101,8 @@ _CMAKE_FLAGS+=(
         -DWITH_LUA=${_use_lua}
         -DWITH_OCC=${_use_occ}
         -DWITH_CONTRIB=${_use_contrib}
-        -DWITH_CHLOMOD=${_use_cholmod}
+        -DWITH_CHOLMOD=${_use_cholmod}
+        -DWITH_Zoltan=${_use_zoltan}
 
         -DNN_INCLUDE_DIR=/usr/include
         -DHYPRE_INCLUDE_DIR=/usr/include/hypre
@@ -121,10 +125,13 @@ _CMAKE_FLAGS+=(
         -DEXTERNAL_UMFPACK=${_use_external_umfpack}
         -DEXTERNAL_ARPACK=${_use_external_arpack}
 
+
         -GNinja
         -Wno-dev
 )
-
+((!DISABLE_ZOLTAN)) && _CMAKE_FLAGS+=(
+                              -DUSE_SYSTEM_ZOLTAN=ON
+                              )
 pkgname=elmerfem-git
 _pkgname=elmerfem
 pkgver=9.0.r3126.g3bf55472d
@@ -146,26 +153,25 @@ conflicts=('elmerfem')
 
 # Main repos
 ((DISABLE_INTERNAL_UMFPACK)) && depends+=('suitesparse')
-((DISABLE_INTERNAL_ARPACK)) && depends+=('arpack') || conflicts+=('arpack')
-((!DISABLE_CHOLMOD))        && depends+=('suitesparse')
-((!DISABLE_GUI))      && depends+=('qt5-base' 'qt5-script' 'qt5-svg' 'glew')
-((!DISABLE_QWT))      && depends+=('qwt')
-((!DISABLE_MPI))      && depends+=('openmpi')
-((!DISABLE_MPI))      && depends+=('netcdf-fortran-openmpi') || depends+=('netcdf-fortran')
-((!DISABLE_MP))       && depends+=('openmp')
-((!DISABLE_PARAVIEW)) && depends+=('paraview')
-((!DISABLE_OCC))      && depends+=('opencascade')  # opencascade
-
+((DISABLE_INTERNAL_ARPACK))  && depends+=('arpack') || conflicts+=('arpack')
+((!DISABLE_CHOLMOD))         && depends+=('suitesparse')
+((!DISABLE_GUI))             && depends+=('qt5-base' 'qt5-script' 'qt5-svg' 'glew')
+((!DISABLE_QWT))             && depends+=('qwt')
+((!DISABLE_MPI))             && depends+=('openmpi')
+((!DISABLE_MPI))             && depends+=('netcdf-fortran-openmpi') || depends+=('netcdf-fortran')
+((!DISABLE_MP))              && depends+=('openmp')
+((!DISABLE_PARAVIEW))        && depends+=('paraview')
+((!DISABLE_OCC))             && depends+=('opencascade')  # opencascade
 #VTK deps
-((!DISABLE_VTK))      && depends+=('vtk' 'tbb' 'openmpi' 'freetype2' 'qt5-base' 'fmt' 'glew' 'pugixml' 'libxcursor' 'mariadb-libs' 'postgresql-libs' 'jdk11-openjdk')
-((!DISABLE_VTK))      && makedepends+=('cli11' 'ospray' 'openxr' 'openvr' 'python-mpi4py' 'boost' 'pdal' 'opencascade' \
+((!DISABLE_VTK))             && depends+=('vtk' 'tbb' 'openmpi' 'freetype2' 'qt5-base' 'fmt' 'glew' 'pugixml' \
+                                            'libxcursor' 'mariadb-libs' 'postgresql-libs' 'jdk11-openjdk')
+((!DISABLE_VTK))             && makedepends+=('cli11' 'ospray' 'openxr' 'openvr' 'python-mpi4py' 'boost' 'pdal' 'opencascade' \
                                         'liblas' 'adios2' 'libharu' 'cgns' 'eigen' 'utf8cpp' 'fast_float')
-
 # AUR
-((!DISABLE_MMG))      && depends+=('mmg')
-((!DISABLE_TRILINOS)) && depends+=('trilinos')
-((!DISABLE_MUMPS))    && depends+=('mumps')    # mumps
-((!DISABLE_HYPRE))    && depends+=('hypre')
+((!DISABLE_MMG))             && depends+=('mmg')
+((!DISABLE_TRILINOS))        && depends+=('trilinos')
+((!DISABLE_MUMPS))           && depends+=('mumps')
+((!DISABLE_HYPRE))           && depends+=('hypre')
 
 options=(!emptydirs !staticlibs)
 ((ENABLE_DEBUG))      && options+=(debug !strip)
