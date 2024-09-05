@@ -3,3 +3,5 @@
 *.zst
 /*/pkg/
 /*/src/
+*.log
+/*/elmerfem/*
