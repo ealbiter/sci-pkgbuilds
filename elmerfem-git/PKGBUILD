@@ -179,7 +179,7 @@ conflicts=('elmerfem')
 options=(!emptydirs !staticlibs)
 ((ENABLE_DEBUG))      && options+=(debug !strip)
 
-source=("git+https://github.com/ElmerCSC/elmerfem.git${_fragment}"
+source=("git+https://github.com/ealbiter/elmerfem.git${_fragment}"
         "$_pkgname.desktop")
 
 sha256sums=('SKIP'
