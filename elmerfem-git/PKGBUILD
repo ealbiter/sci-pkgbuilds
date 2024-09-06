@@ -110,7 +110,6 @@ _CMAKE_FLAGS+=(
         -DWITH_ELMERGUILOGGER=${_use_guilog}
         -DWITH_ELMERGUITESTER=${_use_guitest}
         -DWITH_QWT=${_use_qwt}
-
         -DWITH_VTK=${_use_vtk}
         -DWITH_PARAVIEW=${_use_paraview}
 
@@ -163,7 +162,6 @@ conflicts=('elmerfem')
 if((!DISABLE_NETCFD)); then
   ((!DISABLE_MPI))             && depends+=('netcdf-fortran-openmpi') || depends+=('netcdf-fortran')
 fi
-((!DISABLE_MPI))             && depends+=('netcdf-fortran-openmpi') || depends+=('netcdf-fortran')
 ((!DISABLE_MP))              && depends+=('openmp')
 ((!DISABLE_PARAVIEW))        && depends+=('paraview')
 ((!DISABLE_OCC))             && depends+=('opencascade')  # opencascade
