@@ -1,3 +1,4 @@
+#!/bin/hint/bash
 # Maintainer: E. Albiter
 # Contributor: bartus <arch-user-repoᘓbartus.33mail.com>
 # Contributor: Anton Kudelin <kudelin at protonmail dot com>
@@ -30,7 +31,7 @@ if((!DISABLE_AUTOCONFIG)); then
   DISABLE_PARAVIEW=0
   DISABLE_QWT=0
   DISABLE_CHOLMOD=0
-  DISABLE_ZOLTAN=0
+  DISABLE_ZOLTAN=1
   DISABLE_NETCFD=0
   #DISABLE_ROCALUTION
   DISABLE_OCC=1
@@ -41,6 +42,7 @@ if((!DISABLE_AUTOCONFIG)); then
   DISABLE_HYPRE=1
   DISABLE_INTERNAL_UMFPACK=1
   DISABLE_INTERNAL_ARPACK=1
+  DISABLE_TRILINOS=1
 fi
 
 # Use FRAGMENT=#{commit,tag,brach}=xxx for bisect build
@@ -129,10 +131,6 @@ _CMAKE_FLAGS+=(
                                   )
 ((!DISABLE_ELMERICE))   && _CMAKE_FLAGS+=(
                                   -DWITH_ScatteredDataInterpolator=ON
-                                  -DNN_INCLUDE_DIR=/usr/include
-                                  )
-((!DISABLE_HYPRE))     && CMAKE_FLAGS+=(
-                                  -DHYPRE_INCLUDE_DIR=/usr/include/hypre
                                   )
 pkgname=elmerfem-git
 _pkgname=elmerfem
@@ -154,9 +152,8 @@ depends+=('blas-openblas')
 conflicts=('elmerfem')
 
 # Main repos
-((DISABLE_INTERNAL_UMFPACK)) && depends+=('suitesparse')
+((DISABLE_INTERNAL_UMFPACK ||  !DISABLE_CHOLMOD )) && depends+=('suitesparse')
 ((DISABLE_INTERNAL_ARPACK))  && depends+=('arpack') || conflicts+=('arpack')
-((!DISABLE_CHOLMOD))         && depends+=('suitesparse')
 ((!DISABLE_GUI))             && depends+=('qt5-base' 'qt5-script' 'qt5-svg' 'glew')
 ((!DISABLE_QWT))             && depends+=('qwt')
 ((!DISABLE_MPI))             && depends+=('openmpi')
