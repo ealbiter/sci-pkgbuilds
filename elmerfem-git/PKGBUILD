@@ -119,6 +119,7 @@ _CMAKE_FLAGS+=(
 
         -DEXTERNAL_UMFPACK=${_use_external_umfpack}
         -DEXTERNAL_ARPACK=${_use_external_arpack}
+        -DEXTERNAL_PARPACK=${_use_external_arpack}
 
         -GNinja
 )
