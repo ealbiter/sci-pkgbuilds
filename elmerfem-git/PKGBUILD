@@ -31,6 +31,7 @@ if((!DISABLE_AUTOCONFIG)); then
   DISABLE_QWT=0
   DISABLE_CHOLMOD=0
   DISABLE_ZOLTAN=0
+  DISABLE_NETCFD=0
   #DISABLE_ROCALUTION
   DISABLE_OCC=1
   DISABLE_VTK=1
@@ -38,8 +39,6 @@ if((!DISABLE_AUTOCONFIG)); then
   DISABLE_MPI=0
   DISABLE_MUMPS=1
   DISABLE_HYPRE=1
-  #DISABLE_ZOLTAN
-  #DISABLE_ROCALUTION
   DISABLE_INTERNAL_UMFPACK=1
   DISABLE_INTERNAL_ARPACK=1
 fi
@@ -54,14 +53,15 @@ _fragment=${FRAGMENT:-#branch=devel}
 
 ((DISABLE_ALL))       && eval DISABLE_{TRILINOS,MMG,ELMERICE,CONTRIB,LUA,GUI,MPI}=1
 ((!DISABLE_TRILINOS)) && eval DISABLE_ZOLTAN=0                  # Trilinos contains the Zoltan library
+((!DISABLE_ZOLTAN))   && eval DISABLE_TRILINOS=0                # Zoltan libray is contained in Trilinos
 ((DISABLE_TRILINOS))  && _use_trilinos=OFF || _use_trilinos=ON  # Disable Trilinos - linear system solver (Experimental)
 ((DISABLE_MMG))       && _use_mmg=OFF      || _use_mmg=ON       # Disable MMG - dynamic remeshing
 ((DISABLE_CONTRIB))   && _use_contrib=OFF  || _use_contrib=ON   # Disable multishell solver for composite lamitanes
 ((DISABLE_LUA))       && _use_lua=OFF      || _use_lua=ON       # Disable LUA scripting in solver definitions
 ((DISABLE_MP))        && _use_openmp=OFF   || _use_openmp=ON    # Disable OpenMP threading
 ((DISABLE_CHOLMOD))   && _use_cholmod=OFF  || _use_cholmod=ON   # Use CHOLMOD linear algebra library
-((!DISABLE_ZOLTAN))   && eval DISABLE_TRILINOS=1                # Zoltan libray is contained in Trilinos
 ((DISABLE_ZOLTAN))    && _use_zoltan=OFF   || _use_zoltan=ON    # Use Zoltan mesh repartitioning library
+((DISABLE_NETCFD))    && _use_netcfd=OFF   || _use_netcfd=ON    # Use NetCDF (Network Common Data Form)
 
 ((DISABLE_ELMERICE)) && _use_elmerice=OFF || _use_elmerice=ON  # Disable ElmerICE - glacier melting solver
 ((!DISABLE_ELMERICE)) && eval DISABLE_{INTERNAL_UMFPACK,MPI}=0 #Elmer Ice requires MPI and uses the internal UMFPack
@@ -103,8 +103,7 @@ _CMAKE_FLAGS+=(
         -DWITH_CONTRIB=${_use_contrib}
         -DWITH_CHOLMOD=${_use_cholmod}
         -DWITH_Zoltan=${_use_zoltan}
-
-        -DPHDF5HL_LIBRARY=/usr/lib/libhdf5_hl.so
+        -DWITH_NETCDF=${_use_netcfd}
 
         -DWITH_ELMERGUI=${_use_elmergui}
         -DWITH_QT5=${_use_elmergui}
@@ -123,8 +122,8 @@ _CMAKE_FLAGS+=(
         -DEXTERNAL_ARPACK=${_use_external_arpack}
 
         -GNinja
-        -Wno-dev
 )
+# Always use system-provided library
 ((!DISABLE_ZOLTAN))     && _CMAKE_FLAGS+=(
                                   -DUSE_SYSTEM_ZOLTAN=ON
                                   )
@@ -137,7 +136,7 @@ _CMAKE_FLAGS+=(
                                   )
 pkgname=elmerfem-git
 _pkgname=elmerfem
-pkgver=9.0.r3126.g3bf55472d
+pkgver=9.0
 pkgrel=1
 pkgdesc="A finite element software for multiphysical problems"
 arch=('x86_64')
@@ -161,6 +160,9 @@ conflicts=('elmerfem')
 ((!DISABLE_GUI))             && depends+=('qt5-base' 'qt5-script' 'qt5-svg' 'glew')
 ((!DISABLE_QWT))             && depends+=('qwt')
 ((!DISABLE_MPI))             && depends+=('openmpi')
+if((!DISABLE_NETCFD)); then
+  ((!DISABLE_MPI))             && depends+=('netcdf-fortran-openmpi') || depends+=('netcdf-fortran')
+fi
 ((!DISABLE_MPI))             && depends+=('netcdf-fortran-openmpi') || depends+=('netcdf-fortran')
 ((!DISABLE_MP))              && depends+=('openmp')
 ((!DISABLE_PARAVIEW))        && depends+=('paraview')
@@ -179,7 +181,7 @@ conflicts=('elmerfem')
 options=(!emptydirs !staticlibs)
 ((ENABLE_DEBUG))      && options+=(debug !strip)
 
-source=("git+https://github.com/ealbiter/elmerfem.git${_fragment}"
+source=("git+https://github.com/ElmerCSC/elmerfem.git${_fragment}"
         "$_pkgname.desktop")
 
 sha256sums=('SKIP'
