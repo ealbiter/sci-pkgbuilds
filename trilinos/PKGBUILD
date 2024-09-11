@@ -1,0 +1,51 @@
+# Maintainer: Martin Diehl <aur@martin-diehl.net>
+# Contributor: Gianluca Pettinello <g_pet@hotmail.com>
+# Contributor: Alad Wenter <alad@archlinux.org>
+# Contributor: Jingbei Li <i@jingbei.li>
+# Contributor: Simon Pintarelli <simon.pintarelli@gmail.com>
+# Contributor: Feng Wang <wanng.fenng@gmail.com>
+pkgname=trilinos
+pkgver=16.0.0
+_pkgver=${pkgver//./-}
+pkgrel=1
+pkgdesc="algorithms for the solution of large-scale scientific problems"
+arch=('x86_64')
+url="http://trilinos.org"
+license=('LGPL3')
+depends=('python' 'lapack' 'boost' 'netcdf-openmpi' 'libmatio' 'libx11' 'hdf5-openmpi')
+makedepends=('gcc-fortran' 'perl' 'blas' 'cmake' 'bc' 'python-numpy')
+provides=('trilinos-sacado' 'trilinos-ml' 'zoltan' 'kokkos')
+checkdepends=('cmake')
+source=("https://github.com/trilinos/Trilinos/archive/refs/tags/trilinos-release-$_pkgver.tar.gz")
+sha512sums=('ed8b9f6ec8d35879f28f066685f70c492ee83ffdc42cfed75750216c0c689c81b00355520a7db441e56d83a6a153b0dbe4f8422d163a942cdcc6786235f64688')
+
+
+build() {
+  CFLAGS+=" -Wno-error=incompatible-pointer-types"
+  cmake -S Trilinos-trilinos-release-"$_pkgver" \
+        -B build \
+        -D CMAKE_INSTALL_PREFIX:PATH=/usr \
+        -D BUILD_SHARED_LIBS=ON \
+        -D Zoltan_ENABLE_F90INTERFACE=ON \
+        -D Trilinos_ENABLE_ALL_OPTIONAL_PACKAGES=ON \
+        -D Trilinos_ENABLE_ALL_PACKAGES=ON \
+        -D Trilinos_ENABLE_PyTrilinos=OFF \
+        -D Trilinos_ENABLE_Gtest=OFF \
+        -D Trilinos_ENABLE_TESTS=OFF \
+        -D Trilinos_ENABLE_TrilinosFrameworkTests=OFF \
+        -D Trilinos_ENABLE_TrilinosATDMConfigTests=OFF \
+        -D TPL_ENABLE_gtest=OFF \
+        -D TPL_ENABLE_MPI=ON \
+        -D TPL_ENABLE_HDF5=ON \
+        -D CMAKE_Fortran_FLAGS="$FCFLAGS -fallow-argument-mismatch"
+  make ${MAKEFLAGS} -C build
+}
+
+check() {
+  cd build
+  ctest
+}
+
+package() {
+  DESTDIR=${pkgdir} cmake --install build
+}
