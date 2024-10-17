@@ -10,7 +10,7 @@ pkgdesc="Software tool for constructing and visualizing bibliometric networks"
 arch=('any')
 url="https://www.vosviewer.com"
 license=('GPL')
-depends=('java-runtime')
+depends=('jre-openjdk')
 source=("${url}/downloads/${_pkgname}_${pkgver}_jar.zip"
         "$pkgname.desktop"
         "$pkgname"
